@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vintage 11 – Fußballtrikots Shop</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
+    header { background: #005f00; color: white; padding: 1rem; text-align: center; }
+    h1 { margin: 0; }
+    nav { background: #007700; display: flex; justify-content: center; }
+    nav a { color: white; padding: 1rem; text-decoration: none; }
+    nav a:hover { background: #004400; }
+    main { padding: 1rem; max-width: 1000px; margin: auto; }
+    .product { background: white; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; display: flex; gap: 1rem; }
+    .product img { width: 150px; height: auto; border-radius: 6px; }
+    .product-details { flex: 1; }
+    .product-details h2 { margin-top: 0; }
+    button { background: #007700; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #004400; }
+    #cart { position: fixed; top: 1rem; right: 1rem; background: #007700; color: white; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+    #cart-count { font-weight: bold; }
+    #cart-modal { display: none; position: fixed; top: 60px; right: 20px; width: 300px; background: white; border: 1px solid #ccc; border-radius: 6px; padding: 1rem; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
+    #cart-modal h3 { margin-top: 0; }
+    #cart-modal ul { list-style: none; padding: 0; }
+    #cart-modal li { margin-bottom: 0.5rem; }
+    #close-cart { background: #cc0000; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 3px; cursor: pointer; float: right; }
+    footer { text-align: center; padding: 1rem; font-size: 0.9rem; color: #555; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Vintage 11</h1>
+  <p>Fantrikots mit Stil – keine Originalware, aber mit Herz</p>
+</header>
+
+<nav>
+  <a href="#shop">Shop</a>
+  <a href="#info">Info</a>
+  <a href="#contact">Kontakt</a>
+</nav>
+
+<main>
+  <section id="shop">
+    <h2>Unsere Trikots</h2>
+
+    <div class="product" data-id="1" data-name="Brasilien 2002 Retro Heimtrikot" data-price="35.99">
+      <img src="https://via.placeholder.com/150?text=Brasilien+2002" alt="Brasilien 2002 Retro Heimtrikot" />
+      <div class="product-details">
+        <h2>Brasilien 2002 Retro Heimtrikot</h2>
+        <p>Klassisches gelb-grünes Design, Fan-Replika ohne Originallizenz.</p>
+        <p><strong>Preis: 35,99 €</strong></p>
+        <button class="add-to-cart">In den Warenkorb</button>
+      </div>
+    </div>
+
+    <div class="product" data-id="2" data-name="Spanien 2008 Retro Heimtrikot" data-price="35.99">
+      <img src="https://via.placeholder.com/150?text=Spanien+2008" alt="Spanien 2008 Retro Heimtrikot" />
+      <div class="product-details">
+        <h2>Spanien 2008 Retro Heimtrikot</h2>
+        <p>Rot-goldenes Design, Fan-Version ohne Originallizenz.</p>
+        <p><strong>Preis: 35,99 €</strong></p>
+        <button class="add-to-cart">In den Warenkorb</button>
+      </div>
+    </div>
+
+    <div class="product" data-id="3" data-name="Frankreich 1998 Retro Heimtrikot" data-price="35.99">
+      <img src="https://via.placeholder.com/150?text=Frankreich+1998" alt="Frankreich 1998 Retro Heimtrikot" />
+      <div class="product-details">
+        <h2>Frankreich 1998 Retro Heimtrikot</h2>
+        <p>Blaues Design mit Trikolore, Fan-Replika ohne Originallizenz.</p>
+        <p><strong>Preis: 35,99 €</strong></p>
+        <button class="add-to-cart">In den Warenkorb</button>
+      </div>
+    </div>
+
+  </section>
+
+  <section id="info">
+    <h2>Informationen</h2>
+    <p>Unsere Trikots sind hochwertige Fan-Repliken und keine Originalwaren. Die Trikots können kleine Abweichungen im Design haben.</p>
+    <p>Versandkosten betragen 4,99 € innerhalb Deutschlands.</p>
+    <p>Bei Fragen erreichst du uns per E-Mail oder WhatsApp.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Kontakt</h2>
+    <p>Email: support@vintage11.de</p>
+    <p>WhatsApp: +49 123 4567890</p>
+    <p>Instagram: <a href="https://instagram.com/vintage11" target="_blank">@vintage11</a></p>
+  </section>
+</main>
+
+<button id="cart">Warenkorb (<span id="cart-count">0</span>)</button>
+
+<div id="cart-modal">
+  <button id="close-cart">X</button>
+  <h3>Dein Warenkorb</h3>
+  <ul id="cart-items"></ul>
+  <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+  <button id="checkout">Zur Bestellung</button>
+</div>
+
+<script>
+  const cart = [];
+  const cartCount = document.getElementById('cart-count');
+  const cartModal = document.getElementById('cart-modal');
+  const cartItems = document.getElementById('cart-items');
+  const cartTotal = document.getElementById('cart-total');
+  const cartButton = document.getElementById('cart');
+  const closeCartBtn = document.getElementById('close-cart');
+  const checkoutBtn = document.getElementById('checkout');
+
+  function updateCart() {
+    cartCount.textContent = cart.length;
+    cartItems.innerHTML = '';
+    let total = 0;
+    cart.forEach((item, index) => {
+      total += item.price;
+      const li = document.createElement('li');
+      li.textContent = `${item.name} - ${item.price.toFixed(2)} €`;
+      cartItems.appendChild(li);
+    });
+    cartTotal.textContent = total.toFixed(2);
+  }
+
+  document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', e => {
+      const product = e.target.closest('.product');
+      const id = product.getAttribute('data-id');
+      const name = product.getAttribute('data-name');
+      const price = parseFloat(product.getAttribute('data-price'));
+      cart.push({ id, name, price });
+      updateCart();
+      alert(`"${name}" wurde zum Warenkorb hinzugefügt.`);
+    });
+  });
+
+  cartButton.addEventListener('click', () => {
+    cartModal.style.display = 'block';
+  });
+
+  closeCartBtn.addEventListener('click', () => {
+    cartModal.style.display = 'none';
+  });
+
+  checkoutBtn.addEventListener('click', () => {
+    if (cart.length === 0) {
+      alert('Dein Warenkorb ist leer!');
+      return;
+    }
+    // Bestellprozess - z.B. öffnet WhatsApp mit vorgefertigter Nachricht
+    let message = 'Hallo Vintage 11, ich möchte folgende Trikots bestellen:%0A';
+    cart.forEach(item => {
+      message += `- ${item.name} (${item.price.toFixed(2)} €)%0A`;
+    });
+    const whatsappURL = `https://wa.me/491234567890?text=${message}`;
+    window.open(whatsappURL, '_blank');
+  });
+</script>
+
+<footer>
+  <p>© 2025 Vintage 11 – Fantrikots Shop. Keine Originalware. Alle Rechte vorbehalten.</p>
+</footer>
+
+</body>
+</html>
